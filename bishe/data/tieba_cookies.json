@@ -1,0 +1,221 @@
+[
+  {
+    "domain": ".baidu.com",
+    "expiry": 1772242729,
+    "httpOnly": false,
+    "name": "BA_HECTOR",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "25aka185852g24650lahala02lag8g1kq4e8q26"
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "httpOnly": false,
+    "name": "XFI",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "8c4ed320-143e-11f1-b5d2-3d8e1b41bcb9"
+  },
+  {
+    "domain": ".baidu.com",
+    "expiry": 1803775127,
+    "httpOnly": false,
+    "name": "BAIDUID_BFESS",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "7AADD94A84F2B9B41708EED974CF5B0C:FG=1"
+  },
+  {
+    "domain": ".baidu.com",
+    "expiry": 1803775127,
+    "httpOnly": false,
+    "name": "BAIDUID",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "7AADD94A84F2B9B41708EED974CF5B0C:FG=1"
+  },
+  {
+    "domain": ".baidu.com",
+    "expiry": 1772246629,
+    "httpOnly": true,
+    "name": "ab_sr",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1.0.1_NGUxZDZhOGI1ZmI3ZTY4NWNlZWZjMzBhOThiNjdlODIwMzNiMDY3ZTJmMDJiMWYzZTE2YzAwYjJkYWJmNTYwYmExNmQyZTg1MmI5MGYxMmIzYzYzY2MzNjE5ZTIxNDM4Y2Q0YjMxZGY4N2FiY2ZkZjJkY2JkYWUxYjIxYzAwNWM5ZThiOGE1ZmYyYjljMDJjYzg1NDE1ZWUzZTk1NWE2Zg=="
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "httpOnly": false,
+    "name": "XFCS",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "7855C1CB31441D3ADA774A701478FD5EA863AF3E4BA99D096AE27179683DBE26"
+  },
+  {
+    "domain": ".baidu.com",
+    "expiry": 1772325829,
+    "httpOnly": false,
+    "name": "ariaappid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "c890648bf4dd00d05eb9751dd0548c30"
+  },
+  {
+    "domain": ".baidu.com",
+    "expiry": 1772325829,
+    "httpOnly": false,
+    "name": "ariauseGraymode",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "false"
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "httpOnly": false,
+    "name": "st_key_id",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "17"
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "httpOnly": false,
+    "name": "XFT",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "Mtu5GJ7FrumufCX9ueAbcyNfXhfZgkT9uIt/w1YRMyw="
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "httpOnly": false,
+    "name": "st_sign",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "4b1aadff"
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "expiry": 1772240028,
+    "httpOnly": false,
+    "name": "TIEBA_SID",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "H4sIAAAAAAAAA9MFAPiz3ZcBAAAA"
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "expiry": 1772240028,
+    "httpOnly": false,
+    "name": "TIEBA_NEW_PC",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "0"
+  },
+  {
+    "domain": ".baidu.com",
+    "expiry": 1806799128,
+    "httpOnly": false,
+    "name": "BAIDU_WISE_UID",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "wapp_1772239127581_42"
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "httpOnly": false,
+    "name": "USER_JUMP",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "-1"
+  },
+  {
+    "domain": ".tieba.baidu.com",
+    "expiry": 1803775429,
+    "httpOnly": false,
+    "name": "Hm_lvt_292b2e1608b0823c1cb6beef7243ef34",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "1772239128"
+  },
+  {
+    "domain": ".baidu.com",
+    "expiry": 1803775129,
+    "httpOnly": false,
+    "name": "ZFY",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "DjCKdXnBvMJI3piuSLabnoSvHNZkn4Qv6UgY6SExONI:C"
+  },
+  {
+    "domain": ".baidu.com",
+    "expiry": 1772325530,
+    "httpOnly": false,
+    "name": "arialoadData",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "false"
+  },
+  {
+    "domain": ".tieba.baidu.com",
+    "httpOnly": false,
+    "name": "Hm_lpvt_292b2e1608b0823c1cb6beef7243ef34",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "1772239430"
+  },
+  {
+    "domain": ".baidu.com",
+    "httpOnly": false,
+    "name": "ppfuid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "FOCoIC3q5fKa8fgJnwzbE67EJ49BGJeplOzf+4l4EOvDuu2RXBRv6R3A1AZMa49I27C0gDDLrJyxcIIeAeEhD8JYsoLTpBiaCXhLqvzbzmvy3SeAW17tKgNq/Xx+RgOdb8TWCFe62MVrDTY6lMf2GrfqL8c87KLF2qFER3obJGmQOdEN4XCjrKliPOytfDkLGEimjy3MrXEpSuItnI4KD40l4Tcu4OkC2mcsqxZZEErgwNSQKKIDdXA6eDfuiw2FU7J7xedw9YiDB8v1LZSlzAfjfhzGIkWylUjp0qrpiQvGgLbz7OSojK1zRbqBESR5Pdk2R9IA3lxxOVzA+Iw1TYBZPHzfoK+UHS/6G3TixLPrzvDjYtVPmZ+9/6evcXmhcO1Y58MgLozKnaQIaLfWRFwa8A3ZyTRp/cDxRMhYc97xUSUZS0ReZYJMPG6nCsxNJlhI2UyeJA6QroZFMelR7tnTNS/pLMWceus0e757/UPzWCk2doxxowOinC9vxVcqAAv3LCf1Y7/fHL3PTSf9vid/u2VLX4h1nBtx8EF07eCMhWVv+2qjbPV7ZhXk3reaWRFEeso3s/Kc9n/UXtUfNU1sHiCdbrCW5yYsuSM9SPGDZsl7FhTAKw7qIu38vFZiq+DRc8Vbf7jOiN9xPe0lOdZHUhGHZ82rL5jTCsILwcRVCndrarbwmu7G154MpYiKmTXZkqV7Alo4QZzicdyMbWvwvmR2/m//YVTM8qeZWgDSHjDmtehgLWM45zARbPujeqU0T92Gmgs89l2htrSKIRZUsAP09Vdcm+rcW8txR0PNC+1lfdiTggMVfuFugxfrwHto8MtdheTDw2e58O3YxpdImdyxYIjA1uSy2hfTFv/d3cnXH4nh+maaicAPllDg7JjsxZAfQoVAycJHizlQ5d34k8SzMID0x3kxnXwHfxXvz6DS3RnKydYTBUIWPYKJl1xnES3v8rc3blIovmrJ6rn8E2lr5eRlQeGEOfh1ITViawXiNXHJy8KM8tjkmR604AUZAz08LV42LYM5lu+JtHw1NjGWsaQWWRfGLq36HGHJg3XMRSnqCBUJlagKAFPt2HF0LdsSk4WWcldb97Ar584nVGbSjPXEUVH0VgbUEm+dADzPoLP+NPMYOyhwgfADiqWaXyKT4UNESYXsPBkdGk6mLCaNSEQsDN1G2677Se3qjzDcyXBnEmHEFptRbmyJzKJ73veHPqfFYtsHO9jH0XnhYk8zKdRuqQ7dnuNIDwxm3UCPo22uFI0ZcgPvQm01lxhSlojhlcJmkYiVIX6kHspMuhT3p2yYLf70CvUwIkw="
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "httpOnly": false,
+    "name": "video_bubble0",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "1"
+  },
+  {
+    "domain": "tieba.baidu.com",
+    "httpOnly": false,
+    "name": "st_data",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "f9f882fb8b330d42bbc4760e196f999ae4b2fe69e18b1400b4e035abf3f78ce5fdbcbcbe7f4f39bd0a787f95f5115f0ce9ec884330da26a6fe9563d725e0d32b1c4fd330c946d44f655a0ef898dc7c0f6f357bcbe310f110686975ea4f03f3b73a3a6f66fed0937168e68c0c6f488b5a8414f8583522edbcca9620a8e330ee16ecef4820126314530a77087f78ba05fe"
+  },
+  {
+    "domain": ".tieba.baidu.com",
+    "httpOnly": false,
+    "name": "HMACCOUNT",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "D241532591A8DB6A"
+  }
+]

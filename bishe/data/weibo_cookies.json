@@ -1,0 +1,71 @@
+[
+  {
+    "domain": ".weibo.com",
+    "expiry": 1803279700,
+    "httpOnly": true,
+    "name": "SUB",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "_2A25EntmEDeRhGeFG7FUS-CnPyziIHXVn0lNMrDV8PUNbmtAbLXTMkW9NeM2lkByabp-Yu_0DTSdaOs8nQhwIU7Fz"
+  },
+  {
+    "domain": ".weibo.com",
+    "expiry": 1806303700,
+    "httpOnly": true,
+    "name": "SCF",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "Anuu054jktDVJPtYgQ4K_11RM1RFXz4sbMVQUpS3DrUNTDddGP3bHdEcbiPie6Kjt_UPGrYgH923agplLTDqumM."
+  },
+  {
+    "domain": ".weibo.com",
+    "expiry": 1771745390,
+    "httpOnly": false,
+    "name": "PC_TOKEN",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "358c85e669"
+  },
+  {
+    "domain": "weibo.com",
+    "httpOnly": false,
+    "name": "XSRF-TOKEN",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "M4bGKB3nyuo0V1WNX84KNb3Q"
+  },
+  {
+    "domain": ".weibo.com",
+    "expiry": 1803279700,
+    "httpOnly": false,
+    "name": "SUBP",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "0033WrSXqPxfM725Ws9jqgMF55529P9D9WW7-Fd.A28_jiLBFQrw9LY_5JpX5KzhUgL.FoMRS0M01hM0ehB2dJLoIp7LxKML1KBLBKnLxKqL1hnLBoMN1hMNe0nNe05X"
+  },
+  {
+    "domain": "weibo.com",
+    "expiry": 1771830100,
+    "httpOnly": true,
+    "name": "WBPSESS",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "gFh90AS2ACdvNG4dfKI1Dd-cEHRA0YwfOcjNB6oAHJXXZbKQx82xEx7OZjJ3ZoYTwzPmP6iOdSCKHhbonNB4xADHDlNPHuN72JqHtgX48wecm-ibAk5McB5XvjC5DwQcFhoJn5LQS6EVVHXcdOSCug=="
+  },
+  {
+    "domain": ".weibo.com",
+    "expiry": 1774335700,
+    "httpOnly": false,
+    "name": "ALF",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "02_1774335700"
+  }
+]

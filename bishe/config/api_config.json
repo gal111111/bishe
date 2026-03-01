@@ -1,0 +1,21 @@
+{
+  "llm": {
+    "provider": "deepseek",
+    "api_key": "sk-gxclqeqaklaobomgciagbofmkmeoeciizwqdsmiicsqqlobc",
+    "api_url": "https://api.siliconflow.cn/v1/chat/completions",
+    "model": "deepseek-ai/DeepSeek-V3",
+    "temperature": 0.7,
+    "max_tokens": 2000
+  },
+  "crawler": {
+    "timeout": 30,
+    "retry_times": 3,
+    "cleanup_on_start": true,
+    "max_keywords_per_platform": 10
+  },
+  "data": {
+    "encoding": "utf-8-sig",
+    "deduplicate_by": "content",
+    "min_content_length": 5
+  }
+}
