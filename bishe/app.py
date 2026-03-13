@@ -17,6 +17,7 @@ st.set_page_config(page_title="城市慧眼 3.0", layout="wide", page_icon="🏙
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PROJECT_ROOT)
+sys.path.insert(0, os.path.dirname(PROJECT_ROOT))
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 RAW_DIR = os.path.join(DATA_DIR, "raw")
 

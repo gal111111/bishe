@@ -41,6 +41,35 @@ except ImportError:
     HAS_SNOWNLP = False
     print("[WARN] 未安装SnowNLP，将使用DeepSeek API")
 
+# 迪士尼领域方面类别
+DISNEY_ASPECTS = {
+    "服务": ["服务态度", "工作人员", "客服", "服务质量", "服务效率"],
+    "环境": ["卫生", "环境整洁", "空气质量", "噪音", "绿化"],
+    "设施": ["游乐设施", "休息区", "厕所", "餐饮设施", "购物设施"],
+    "排队": ["排队时间", "排队秩序", "排队环境", "快速通", "排队管理"],
+    "价格": ["门票价格", "餐饮价格", "商品价格", "性价比", "优惠活动"],
+    "时间": ["开放时间", "表演时间", "项目运行时间", "等待时间", "游玩时间"],
+    "交通": ["交通便利", "停车", "公共交通", "入园速度", "离园交通"],
+    "餐饮": ["餐饮质量", "餐饮种类", "餐饮价格", "餐饮环境", "餐饮服务"],
+    "表演": ["烟花表演", "花车巡游", "舞台表演", "表演质量", "表演时间"],
+    "住宿": ["酒店环境", "酒店服务", "酒店价格", "酒店设施", "酒店位置"],
+    "其他": ["整体体验", "安全性", "便利性", "创新性", "推荐度"]
+}
+
+# 情感词典
+SENTIMENT_DICT = {
+    "积极": ["好", "棒", "优秀", "满意", "喜欢", "赞", "推荐", "舒服", "方便", "干净", "快速", "热情", "专业", "贴心", "周到", "准时", "丰富", "精彩", "值得"],
+    "消极": ["差", "糟糕", "失望", "不满", "讨厌", "坑", "贵", "慢", "脏", "乱", "吵", "拥挤", "冷漠", "不专业", "敷衍", "迟到", "单调", "无聊", "不值"],
+    "中性": ["一般", "普通", "还行", "马马虎虎", "凑合", "中规中矩"]
+}
+
+# 程度副词词典
+DEGREE_ADVERBS = {
+    "非常": 1.5, "特别": 1.4, "很": 1.3, "相当": 1.2, "十分": 1.2, "极其": 1.6, "超级": 1.5,
+    "比较": 0.8, "有点": 0.6, "稍微": 0.5, "略微": 0.4,
+    "不": -1, "没": -1, "无": -1, "非": -1, "未": -1
+}
+
 # 初始化DeepSeek客户端
 try:
     deepseek_client = DeepSeekClient()
@@ -168,6 +197,119 @@ def call_deepseek_api(messages: List[Dict[str, str]], model: str = None, tempera
     except Exception as e:
         print(f"[WARN] 调用DeepSeek API失败: {e}")
         return None
+
+def extract_aspects(text: str) -> List[Dict[str, str]]:
+    """
+    从文本中提取方面及其情感
+    
+    Args:
+        text: 待分析的文本
+        
+    Returns:
+        方面及其情感的列表
+    """
+    aspects = []
+    
+    # 确保text是字符串
+    text = str(text) if text is not None else ""
+    
+    # 遍历所有方面类别
+    for aspect_category, sub_aspects in DISNEY_ASPECTS.items():
+        # 检查是否包含该方面的关键词
+        for sub_aspect in sub_aspects:
+            if sub_aspect in text:
+                # 提取该方面的情感
+                aspect_sentiment = analyze_aspect_sentiment(text, sub_aspect)
+                aspects.append({
+                    "category": aspect_category,
+                    "aspect": sub_aspect,
+                    "polarity": aspect_sentiment["polarity"],
+                    "intensity": aspect_sentiment["intensity"],
+                    "specific_emotion": aspect_sentiment["specific_emotion"],
+                    "csi_score": aspect_sentiment["csi_score"]
+                })
+    
+    # 如果没有提取到任何方面，添加一个默认方面
+    if not aspects:
+        # 直接使用analyze_aspect_sentiment分析整体情感
+        general_sentiment = analyze_aspect_sentiment(text, "整体体验")
+        aspects.append({
+            "category": "其他",
+            "aspect": "整体体验",
+            "polarity": general_sentiment["polarity"],
+            "intensity": general_sentiment["intensity"],
+            "specific_emotion": general_sentiment["specific_emotion"],
+            "csi_score": general_sentiment["csi_score"]
+        })
+    
+    return aspects
+
+def analyze_aspect_sentiment(text: str, aspect: str) -> Dict[str, str]:
+    """
+    分析特定方面的情感
+    
+    Args:
+        text: 待分析的文本
+        aspect: 要分析的方面
+        
+    Returns:
+        情感分析结果
+    """
+    # 默认返回值
+    default_result = {
+        "polarity": "中性",
+        "intensity": "3",
+        "specific_emotion": "中性",
+        "csi_score": "50"
+    }
+    
+    # 计算情感得分
+    sentiment_score = 0.0
+    degree_factor = 1.0
+    
+    # 检查情感词
+    for sentiment, words in SENTIMENT_DICT.items():
+        for word in words:
+            if word in text:
+                # 计算情感得分
+                if sentiment == "积极":
+                    sentiment_score += 1.0
+                elif sentiment == "消极":
+                    sentiment_score -= 1.0
+                else:
+                    sentiment_score += 0.0
+    
+    # 检查程度副词
+    for adverb, factor in DEGREE_ADVERBS.items():
+        if adverb in text:
+            degree_factor *= factor
+    
+    # 应用程度副词的影响
+    sentiment_score *= degree_factor
+    
+    # 确定情感倾向
+    if sentiment_score > 0.5:
+        polarity = "积极"
+        specific_emotion = "满意"
+        intensity = str(min(5, int(sentiment_score * 2) + 3))
+        csi_score = str(int(min(100, 50 + sentiment_score * 25)))
+    elif sentiment_score < -0.5:
+        polarity = "消极"
+        specific_emotion = "失望"
+        intensity = str(min(5, int(abs(sentiment_score) * 2) + 3))
+        csi_score = str(int(max(0, 50 + sentiment_score * 25)))
+    else:
+        polarity = "中性"
+        specific_emotion = "中性"
+        intensity = "3"
+        csi_score = "50"
+    
+    return {
+        "polarity": polarity,
+        "intensity": intensity,
+        "specific_emotion": specific_emotion,
+        "csi_score": csi_score
+    }
 
 def analyze_sentiment(text: str, preferred: str = "deepseek") -> Dict[str, str]:
     """分析单条文本的情感"""
@@ -409,7 +551,8 @@ def analyze_dataframe(df: pd.DataFrame, preferred: str = "snownlp", progress_cal
                 "urgency": "0",
                 "need_improvement": "否",
                 "polarity_label": "中性",
-                "analysis_method": "none"
+                "analysis_method": "none",
+                "aspects": "[]"
             }
         else:
             # 决定使用哪种分析方式
@@ -429,8 +572,13 @@ def analyze_dataframe(df: pd.DataFrame, preferred: str = "snownlp", progress_cal
                 else:
                     current_method = "snownlp"
             
+            # 分析整体情感
             result = analyze_sentiment(text, current_method)
             result["analysis_method"] = current_method
+            
+            # 提取方面级情感
+            aspects = extract_aspects(text)
+            result["aspects"] = json.dumps(aspects, ensure_ascii=False)
         
         # 将结果添加到行中
         row_dict = row.to_dict()
@@ -470,6 +618,7 @@ def generate_ai_report(df: pd.DataFrame, preferred: str = "deepseek", per_facili
     report_data = []
     aspect_data = []
     absa_data = []
+    detailed_absa_data = []
     
     for facility, group in facility_groups:
         # 限制每个设施的样本数量
@@ -530,13 +679,32 @@ def generate_ai_report(df: pd.DataFrame, preferred: str = "deepseek", per_facili
                     'min_csi_score': absa_subgroup['csi_score'].min(),
                     'max_csi_score': absa_subgroup['csi_score'].max()
                 })
+        
+        # 处理详细的方面级情感分析数据
+        if 'aspects' in group.columns:
+            for _, row in group.iterrows():
+                try:
+                    aspects = json.loads(row.get('aspects', '[]'))
+                    for aspect_info in aspects:
+                        detailed_absa_data.append({
+                            'facility_type': facility,
+                            'category': aspect_info.get('category', '其他'),
+                            'aspect': aspect_info.get('aspect', '整体体验'),
+                            'polarity': aspect_info.get('polarity', '中性'),
+                            'intensity': int(aspect_info.get('intensity', '3')),
+                            'specific_emotion': aspect_info.get('specific_emotion', '中性'),
+                            'csi_score': float(aspect_info.get('csi_score', '50'))
+                        })
+                except Exception as e:
+                    print(f"[WARN] 解析aspects字段失败: {e}")
     
     # 创建DataFrame
     report_df = pd.DataFrame(report_data)
     aspect_df = pd.DataFrame(aspect_data)
     absa_report_df = pd.DataFrame(absa_data)
+    detailed_absa_df = pd.DataFrame(detailed_absa_data)
     
-    return report_df, aspect_df, absa_report_df
+    return report_df, aspect_df, absa_report_df, detailed_absa_df
 
 if __name__ == "__main__":
     # 测试

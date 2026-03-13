@@ -10,6 +10,7 @@ from datetime import datetime
 
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
+sys.path.insert(0, os.path.dirname(project_root))
 
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
@@ -634,13 +635,11 @@ if __name__ == "__main__":
     try:
         spider = WeiboSpider(headless=False)
         
-        keyword = "上海迪士尼"
-        official_url = "https://weibo.com/u/5200478600"
+        keyword = "北京环球影城"
         print("测试爬取关键词: %s" % keyword)
-        print("直接访问官方微博主页: %s" % official_url)
-        print("目标爬取微博数: 20条（以获取约100条评论）")
+        print("目标爬取微博数: 30条（以获取更多评论）")
         
-        weibo_data = spider.crawl(keyword, target_count=20, is_official=True, official_url=official_url)
+        weibo_data = spider.crawl(keyword, target_count=30, is_official=False)
         
         csv_path = None
         if weibo_data:

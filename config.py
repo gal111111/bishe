@@ -21,7 +21,12 @@ try:
     if os.path.exists(env_path):
         load_dotenv(env_path)
     else:
-        load_dotenv()
+        # Try to load from bishe subdirectory
+        bishe_env_path = os.path.join(os.path.dirname(__file__), 'bishe', '.env')
+        if os.path.exists(bishe_env_path):
+            load_dotenv(bishe_env_path)
+        else:
+            load_dotenv()
 except ImportError:
     pass  # dotenv not installed, will use system environment variables
 

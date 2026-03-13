@@ -23,6 +23,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException,
 
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.insert(0, project_root)
+sys.path.insert(0, os.path.dirname(project_root))
 
 from src.crawlers.selenium_spiders.common import init_csv_header, format_time_str, format_numeric_value, save_to_csv_standard
 
@@ -716,11 +717,11 @@ if __name__ == "__main__":
     try:
         spider = ZhihuSpider(headless=False)
         
-        keyword = "上海迪士尼"
+        keyword = "北京环球影城"
         print("测试爬取关键词: %s" % keyword)
-        print("目标爬取知乎数: 20条（以获取约100条评论）")
+        print("目标爬取知乎数: 30条（以获取更多评论）")
         
-        zhihu_data = spider.crawl(keyword, target_count=20)
+        zhihu_data = spider.crawl(keyword, target_count=30)
         
         csv_path = None
         if zhihu_data:

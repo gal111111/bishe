@@ -7,6 +7,7 @@ import time
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PROJECT_ROOT)
+sys.path.insert(0, os.path.dirname(PROJECT_ROOT))
 
 from src.analysis.sentiment_analysis import analyze_dataframe, preprocess_data, generate_ai_report
 from src.visualization.dashboard import generate_visualizations
@@ -88,7 +89,7 @@ print("\n[阶段 4/5] 生成可视化")
 print("=" * 80)
 
 try:
-    rep_df, asp_df, absa_df = generate_ai_report(df_analyzed)
+    rep_df, asp_df, absa_df, detailed_absa_df = generate_ai_report(df_analyzed)
     generate_visualizations(df_analyzed, rep_df, asp_df, VIZ_DIR)
     print(f"✅ 可视化生成完成")
     print(f"   图表保存目录: {VIZ_DIR}")

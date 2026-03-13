@@ -32,16 +32,27 @@ except ImportError:
 
 try:
     import tensorflow as tf
-    from tensorflow.keras.models import Sequential
-    from tensorflow.keras.layers import LSTM, Dense, Dropout
+    from tensorflow.keras.models import Sequential, Model
+    from tensorflow.keras.layers import LSTM, Dense, Dropout, Input, MultiHeadAttention, LayerNormalization, Add, Embedding, Flatten, Conv1D
+    from tensorflow.keras.optimizers import Adam
 except ImportError:
     print("⚠️  TensorFlow not available. LSTM dynamic alert disabled")
     print("⚠️  TensorFlow not available. LSTM prediction disabled")
+    print("⚠️  TensorFlow not available. ST-Transformer prediction disabled")
     tf = None
     Sequential = None
     LSTM = None
     Dense = None
     Dropout = None
+    Model = None
+    Input = None
+    MultiHeadAttention = None
+    LayerNormalization = None
+    Add = None
+    Embedding = None
+    Flatten = None
+    Conv1D = None
+    Adam = None
 
 class TimeSeriesAnalyzer:
     """时间序列分析器"""
@@ -257,6 +268,186 @@ class TimeSeriesAnalyzer:
         except Exception as e:
             print(f"⚠️  检测异常值失败: {e}")
             return []
+    
+    def create_st_transformer_model(self, input_shape: tuple, num_heads: int = 4, d_model: int = 64, dff: int = 128, dropout_rate: float = 0.1) -> Optional[Model]:
+        """
+        创建时空融合Transformer模型
+        
+        Args:
+            input_shape: 输入形状 (序列长度, 特征维度)
+            num_heads: 注意力头数
+            d_model: 模型维度
+            dff: 前馈网络隐藏层维度
+            dropout_rate:  dropout率
+            
+        Returns:
+            ST-Transformer模型
+        """
+        if not all([tf, Model, Input, MultiHeadAttention, LayerNormalization, Add, Dense, Dropout]):
+            print("⚠️  TensorFlow not available. Cannot create ST-Transformer model")
+            return None
+        
+        try:
+            # 输入层
+            inputs = Input(shape=input_shape)
+            
+            # 位置编码
+            seq_length = input_shape[0]
+            pos_encoding = self._get_positional_encoding(seq_length, input_shape[1])
+            x = inputs + pos_encoding
+            
+            # 注意力层
+            for _ in range(2):  # 2层Transformer
+                # 多头注意力
+                attn_output = MultiHeadAttention(
+                    num_heads=num_heads, 
+                    key_dim=d_model // num_heads
+                )(x, x)
+                attn_output = Dropout(dropout_rate)(attn_output)
+                x = Add()([x, attn_output])
+                x = LayerNormalization(epsilon=1e-6)(x)
+                
+                # 前馈网络
+                ffn_output = Dense(dff, activation='relu')(x)
+                ffn_output = Dense(input_shape[1])(ffn_output)
+                ffn_output = Dropout(dropout_rate)(ffn_output)
+                x = Add()([x, ffn_output])
+                x = LayerNormalization(epsilon=1e-6)(x)
+            
+            # 卷积层提取空间特征
+            x = Conv1D(filters=32, kernel_size=3, activation='relu', padding='same')(x)
+            x = Dropout(dropout_rate)(x)
+            
+            # 展平
+            x = Flatten()(x)
+            
+            # 输出层
+            outputs = Dense(1)(x)
+            
+            # 创建模型
+            model = Model(inputs=inputs, outputs=outputs)
+            model.compile(optimizer=Adam(learning_rate=1e-3), loss='mse')
+            
+            return model
+        except Exception as e:
+            print(f"⚠️  创建ST-Transformer模型失败: {e}")
+            return None
+    
+    def _get_positional_encoding(self, seq_length: int, d_model: int) -> Optional[Any]:
+        """
+        生成位置编码
+        
+        Args:
+            seq_length: 序列长度
+            d_model: 模型维度
+            
+        Returns:
+            位置编码张量
+        """
+        if not tf:
+            return None
+        
+        position = tf.range(seq_length, dtype=tf.float32)[:, tf.newaxis]
+        div_term = tf.exp(tf.range(0, d_model, 2, dtype=tf.float32) * -(tf.math.log(10000.0) / d_model))
+        pos_encoding = tf.concat([tf.sin(position * div_term), tf.cos(position * div_term)], axis=-1)
+        pos_encoding = pos_encoding[tf.newaxis, ...]  # 添加批次维度
+        
+        return tf.cast(pos_encoding, dtype=tf.float32)
+    
+    def predict_with_st_transformer(self, df: pd.DataFrame, periods: int = 7, value_col: str = 'csi_score', lookback: int = 14) -> Dict[str, Any]:
+        """
+        使用ST-Transformer进行预测
+        
+        Args:
+            df: 输入数据
+            periods: 预测天数
+            value_col: 预测值列名
+            lookback: 历史数据长度
+            
+        Returns:
+            预测结果
+        """
+        if not all([tf, Model]):
+            return {"error": "TensorFlow not available"}
+        
+        try:
+            # 确保日期列存在
+            if 'date' not in df.columns:
+                df = df.copy()
+                df['date'] = pd.date_range(start='2024-01-01', periods=len(df), freq='D')
+            
+            # 按日期排序
+            df_sorted = df.sort_values('date')
+            
+            # 准备数据
+            values = df_sorted[value_col].values.reshape(-1, 1)
+            
+            # 数据归一化
+            from sklearn.preprocessing import MinMaxScaler
+            scaler = MinMaxScaler()
+            values_scaled = scaler.fit_transform(values)
+            
+            # 创建训练数据
+            X, y = [], []
+            for i in range(lookback, len(values_scaled)):
+                X.append(values_scaled[i-lookback:i])
+                y.append(values_scaled[i])
+            
+            X = np.array(X)
+            y = np.array(y)
+            
+            if len(X) == 0:
+                return {"error": "Not enough data for prediction"}
+            
+            # 创建并训练模型
+            model = self.create_st_transformer_model((lookback, 1))
+            if not model:
+                return {"error": "Failed to create ST-Transformer model"}
+            
+            # 训练模型
+            model.fit(X, y, epochs=50, batch_size=32, verbose=0)
+            
+            # 预测
+            predictions = []
+            current_input = values_scaled[-lookback:].reshape(1, lookback, 1)
+            
+            for _ in range(periods):
+                pred = model.predict(current_input, verbose=0)
+                predictions.append(pred[0][0])
+                # 更新输入
+                current_input = np.roll(current_input, -1, axis=1)
+                current_input[0, -1, 0] = pred[0][0]
+            
+            # 反归一化
+            predictions = scaler.inverse_transform(np.array(predictions).reshape(-1, 1)).flatten()
+            
+            # 生成预测日期
+            last_date = df_sorted['date'].iloc[-1]
+            pred_dates = [last_date + timedelta(days=i+1) for i in range(periods)]
+            
+            # 格式化结果
+            result = {
+                "success": True,
+                "predictions": [],
+                "model_info": {
+                    "model": "ST-Transformer",
+                    "lookback": lookback,
+                    "forecast_periods": periods
+                }
+            }
+            
+            for date, value in zip(pred_dates, predictions):
+                result["predictions"].append({
+                    "date": date.strftime('%Y-%m-%d'),
+                    "value": float(value),
+                    "lower_bound": float(value * 0.9),  # 简单的置信区间
+                    "upper_bound": float(value * 1.1)
+                })
+            
+            return result
+        except Exception as e:
+            print(f"⚠️  ST-Transformer预测失败: {e}")
+            return {"error": str(e)}
 
 if __name__ == "__main__":
     # 测试
@@ -293,3 +484,13 @@ if __name__ == "__main__":
         # 测试绘制预测图
         prediction_path = analyzer.plot_predictions(df, prediction_result, score_col='csi_score', title='测试满意度趋势预测', filename='test_prediction.png')
         print(f"预测图保存路径: {prediction_path}")
+    
+    # 测试ST-Transformer预测
+    if tf:
+        st_prediction_result = analyzer.predict_with_st_transformer(df, periods=7, value_col='csi_score', lookback=14)
+        print(f"ST-Transformer预测结果: {st_prediction_result}")
+        
+        # 测试绘制预测图
+        if "error" not in st_prediction_result and st_prediction_result.get("success", False):
+            st_prediction_path = analyzer.plot_predictions(df, st_prediction_result, score_col='csi_score', title='ST-Transformer满意度趋势预测', filename='test_st_prediction.png')
+            print(f"ST-Transformer预测图保存路径: {st_prediction_path}")
