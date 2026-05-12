@@ -1,0 +1,37 @@
+# 上海迪士尼舆情分析系统 Docker Compose 配置
+version: '3.8'
+
+services:
+  sentiment-analysis:
+    build: .
+    container_name: disney-sentiment-analysis
+    ports:
+      - "8502:8502"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONIOENCODING=utf-8
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8502/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 可选：添加 Redis 用于缓存
+  redis:
+    image: redis:7-alpine
+    container_name: disney-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+volumes:
+  redis_data:

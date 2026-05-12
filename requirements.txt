@@ -1,0 +1,29 @@
+pandas>=2.2
+numpy>=1.26
+streamlit>=1.39
+plotly>=5.24
+matplotlib>=3.8
+seaborn>=0.13
+selenium>=4.20
+requests>=2.32
+python-dotenv>=1.0
+jieba>=0.42
+snownlp>=0.12.3
+scikit-learn>=1.5
+networkx>=3.3
+beautifulsoup4>=4.12
+lxml>=5.2
+wordcloud>=1.9
+Pillow>=10.3
+tqdm>=4.66
+openpyxl>=3.1
+psutil>=5.9
+pytest>=8.0
+
+# 新增：Playwright浏览器自动化（现代爬虫方案）
+playwright>=1.50.0
+playwright-stealth>=1.0.0
+
+# 新增：Browser Agent（AI驱动浏览器，论文创新点）
+browser-use>=0.25.0
+langchain-openai>=0.3.0

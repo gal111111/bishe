@@ -1,0 +1,112 @@
+[
+  {
+    "name": "csrfToken",
+    "value": "j65iLq9wc1UsmKCYallUbcGL",
+    "domain": "bbs.hupu.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "HMACCOUNT_BFESS",
+    "value": "CD5C77677B2F98B2",
+    "domain": ".hm.baidu.com",
+    "path": "/",
+    "expires": 1812195126.283649,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "None"
+  },
+  {
+    "name": "Hm_lvt_df703c1d2273cc30ba452b4c15b16a0d",
+    "value": "1777635126",
+    "domain": ".bbs.hupu.com",
+    "path": "/",
+    "expires": 1810069316,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "HMACCOUNT",
+    "value": "CD5C77677B2F98B2",
+    "domain": ".bbs.hupu.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "smidV2",
+    "value": "202605011932064ca6486584783909c69a16bb2d072cd00057ffe1b90ffbcc0",
+    "domain": "bbs.hupu.com",
+    "path": "/",
+    "expires": 1812195126.947327,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "sensorsdata2015jssdkcross",
+    "value": "%7B%22distinct_id%22%3A%2219de34f6b2d470-03ed755c1362656-1f525637-1024000-19de34f6b2eb7f%22%2C%22first_id%22%3A%22%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E7%9B%B4%E6%8E%A5%E6%B5%81%E9%87%8F%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC_%E7%9B%B4%E6%8E%A5%E6%89%93%E5%BC%80%22%2C%22%24latest_referrer%22%3A%22%22%7D%2C%22%24device_id%22%3A%2219de34f6b2d470-03ed755c1362656-1f525637-1024000-19de34f6b2eb7f%22%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfYW5vbnltb3VzX2lkIjoiMTlkZTM0ZjZiMmQ0NzAtMDNlZDc1NWMxMzYyNjU2LTFmNTI1NjM3LTEwMjQwMDAtMTlkZTM0ZjZiMmViN2YiLCIkaWRlbnRpdHlfY29va2llX2lkIjoiMTlkZTM1YzY4MWZjNjgtMGY0MGQ3YzFhMjA3MmEtMWY1MjU2MzctMTAyNDAwMC0xOWRlMzVjNjgyMDE4NTUifQ%3D%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%22%2C%22value%22%3A%22%22%7D%7D",
+    "domain": ".hupu.com",
+    "path": "/",
+    "expires": 1813093315.942494,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": ".thumbcache_33f5730e7694fd15728921e201b4826a",
+    "value": "vA05xgpOv9jODbbQi4BlzzWDQZydFdfCcOdX8BMNOaoD9HdGT3e+4/P0V1XaIdzG34tbVVQZCANXESFE2k2+kQ%3D%3D",
+    "domain": "bbs.hupu.com",
+    "path": "/",
+    "expires": 1813093317.493826,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "SERVERID",
+    "value": "30998cc1a03bf693c87d64fa351e7a15|1777636025|1777635127",
+    "domain": "hermes.hupu.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "acw_tc",
+    "value": "781bad4817785332414493690e3b3a2e7e46fea7c0630483a971cb3300e883",
+    "domain": "bbs.hupu.com",
+    "path": "/",
+    "expires": 1778535034.395324,
+    "httpOnly": true,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "acw_tc",
+    "value": "707c9f6e17785332452068724ea7169c1fb4f21155d6bcf943cb942c545f03",
+    "domain": "my.hupu.com",
+    "path": "/",
+    "expires": 1778535038.092425,
+    "httpOnly": true,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "Hm_lpvt_df703c1d2273cc30ba452b4c15b16a0d",
+    "value": "1778533317",
+    "domain": ".bbs.hupu.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  }
+]
