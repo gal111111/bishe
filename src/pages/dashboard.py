@@ -10,6 +10,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from src.utils.chart_config import apply_dark_theme, COLOR_MAP_SENTIMENT, COLOR_SEQUENCES
+from src.utils.error_handler import safe_execute
 
 try:
     from streamlit import components
@@ -17,6 +18,7 @@ except ImportError:
     components = None
 
 
+@safe_execute(default_return=None, user_message="驾驶舱加载出错，请稍后重试")
 def show_dashboard(df, data_dir):
     """驾驶舱：核心数据展示 + 整改推演
 
@@ -36,7 +38,7 @@ def show_dashboard(df, data_dir):
         </div>
         """, unsafe_allow_html=True)
     with col_time:
-        st.caption(f"最后更新: {pd.to_datetime('today').strftime('%Y-%m-%d %H:%M:%S')}")
+        st.caption(f"最后更新: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
         st.caption(f"数据来源: {df['platform'].unique()[0] if 'platform' in df.columns else '多平台'}")
 
     st.markdown("---")

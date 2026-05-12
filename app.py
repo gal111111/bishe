@@ -52,17 +52,7 @@ def timing_decorator(func):
     return wrapper
 
 
-def safe_page(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            st.error(f"页面加载出错: {e}")
-            with st.expander("🔍 查看错误详情"):
-                import traceback
-                st.code(traceback.format_exc())
-    return wrapper
+from src.utils.error_handler import global_exception_handler, safe_execute
 
 
 from src.analysis.sentiment_analysis import analyze_dataframe, generate_ai_report, call_deepseek_api
@@ -120,7 +110,6 @@ def main():
             <div style="font-size: 64px; margin-bottom: 10px;">🏙️</div>
             <h2 style="margin: 0; font-size: 24px; font-weight: 800;">城市慧眼 4.0</h2>
             <p style="margin: 5px 0 0 0; color: #8B949E; font-size: 13px;">城市公共设施舆情分析系统</p>
-        </div>
         """, unsafe_allow_html=True)
 
         st.markdown("---")
@@ -139,29 +128,29 @@ def main():
     if nav == "驾驶舱":
         df = _get_df()
         if df is not None:
-            show_dashboard(df, DATA_DIR)
+            global_exception_handler(show_dashboard)(df, DATA_DIR)
         else:
             st.warning("请先去数据中心分析数据")
     elif nav == "数据中心":
-        page_data_center(DATA_DIR, RAW_DIR, read_csv_cached)
+        global_exception_handler(page_data_center)(DATA_DIR, RAW_DIR, read_csv_cached)
     elif nav == "创新可视化":
-        page_novel_viz(DATA_DIR, load_analyzed_df, read_csv_cached)
+        global_exception_handler(page_novel_viz)(DATA_DIR, load_analyzed_df, read_csv_cached)
     elif nav == "前沿技术":
         df = _get_df()
         if df is not None:
-            create_advanced_tech_page(df)
+            global_exception_handler(create_advanced_tech_page)(df)
         else:
             st.warning("请先去数据中心分析数据")
     elif nav == "前沿算法":
         df = _get_df()
         if df is not None:
-            create_advanced_analysis_page(df)
+            global_exception_handler(create_advanced_analysis_page)(df)
         else:
             st.warning("请先去数据中心分析数据")
     elif nav == "智能问答":
-        page_chatbot(load_analyzed_df)
+        global_exception_handler(page_chatbot)(load_analyzed_df)
     elif nav == "报告下载":
-        page_report(DATA_DIR, load_analyzed_df)
+        global_exception_handler(page_report)(DATA_DIR, load_analyzed_df)
 
 
 if __name__ == "__main__":

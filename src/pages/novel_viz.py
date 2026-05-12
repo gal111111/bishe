@@ -12,8 +12,11 @@ from src.visualization.novel_visualizations import (
     create_cross_platform_radar,
     create_data_cleaning_visualization,
 )
+from src.utils.error_handler import safe_execute
+from src.utils.chart_config import apply_dark_theme
 
 
+@safe_execute(default_return=None, user_message="创新可视化加载出错，请稍后重试")
 def page_novel_viz(data_dir, load_analyzed_df, read_csv_cached):
     """创新可视化引擎页面
 
@@ -50,18 +53,21 @@ def page_novel_viz(data_dir, load_analyzed_df, read_csv_cached):
         st.markdown("### 🌊 实时舆情流动画")
         st.caption("创新点：用动态气泡流展示舆情数据的实时流动，气泡大小=互动量，颜色=情感，位置=时间轴")
         fig_flow = create_sentiment_flow_animation(df)
+        apply_dark_theme(fig_flow, height=400)
         st.plotly_chart(fig_flow, use_container_width=True)
 
     with tab2:
         st.markdown("### 🗺️ 上海迪士尼舆情地理热力图")
         st.caption("创新点：将舆情数据映射到地理空间，展示不同区域的情感强度分布")
         fig_geo = create_geo_heatmap(df)
+        apply_dark_theme(fig_geo, height=400)
         st.plotly_chart(fig_geo, use_container_width=True)
 
     with tab3:
         st.markdown("### 📈 情感演化时间线")
         st.caption("创新点：用面积图+趋势线展示情感的时间演化，识别舆情爆发点与转折点")
         fig_timeline = create_sentiment_timeline(df)
+        apply_dark_theme(fig_timeline, height=400)
         st.plotly_chart(fig_timeline, use_container_width=True)
 
     with tab4:
@@ -69,6 +75,7 @@ def page_novel_viz(data_dir, load_analyzed_df, read_csv_cached):
         st.caption("创新点：将不同平台的舆情特征在多维度上对比，直观展示平台差异")
         if 'platform' in df.columns:
             fig_radar = create_cross_platform_radar(df)
+            apply_dark_theme(fig_radar, height=400)
             st.plotly_chart(fig_radar, use_container_width=True)
         else:
             st.info("💡 需要包含 platform 列的数据才能展示跨平台对比。请合并多平台数据后重试。")
@@ -86,6 +93,7 @@ def _render_cleaning_tab(df, data_dir, read_csv_cached):
     if os.path.exists(cleaned_path):
         df_cleaned = read_csv_cached(cleaned_path, os.path.getmtime(cleaned_path), encoding="utf-8-sig")
         fig_clean = create_data_cleaning_visualization(df, df_cleaned)
+        apply_dark_theme(fig_clean, height=400)
         st.plotly_chart(fig_clean, use_container_width=True)
 
         col1, col2, col3, col4 = st.columns(4)

@@ -1,51 +1,19 @@
 # -*- coding: utf-8 -*-
 """
 智能决策助手页面模块：基于RAG的智能问答系统
-优化检索逻辑：jieba分词 + 多关键词OR匹配 + TF-IDF相似度排序
+使用 rag_retriever.py 的 RAGRetriever 类进行检索增强
 """
 import os
-import math
 import pandas as pd
 import streamlit as st
 
 from src.analysis.sentiment_analysis import call_deepseek_api
-
-try:
-    import jieba
-    _JIEBA_AVAILABLE = True
-except ImportError:
-    _JIEBA_AVAILABLE = False
-
-try:
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    _TFIDF_AVAILABLE = True
-except ImportError:
-    _TFIDF_AVAILABLE = False
-
-
-def _segment_prompt(prompt: str) -> list:
-    """对用户输入进行分词，提取有效检索关键词
-
-    Args:
-        prompt: 用户输入的自然语言问题
-
-    Returns:
-        list: 去重后的关键词列表
-    """
-    if _JIEBA_AVAILABLE:
-        words = jieba.lcut(prompt)
-        return list({w.strip() for w in words if len(w.strip()) >= 2})
-    return [prompt[i:i+2] for i in range(0, len(prompt), 2) if prompt[i:i+2].strip()]
+from src.utils.rag_retriever import RAGRetriever
+from src.utils.error_handler import safe_execute
 
 
 def _rag_search(df: pd.DataFrame, prompt: str, top_n: int = 20) -> pd.DataFrame:
-    """RAG智能检索：jieba分词 + 多关键词OR匹配 + TF-IDF相似度排序
-
-    检索策略：
-    1. 对用户输入进行jieba分词，提取关键词
-    2. 在content列中进行多关键词OR匹配，筛选候选集
-    3. 使用TF-IDF计算候选文档与查询的相似度，排序取top_n
-    4. 回退策略：TF-IDF不可用时使用关键词命中数排序
+    """RAG智能检索：使用 RAGRetriever 进行 TF-IDF 相似度检索
 
     Args:
         df: 分析结果数据框
@@ -55,50 +23,33 @@ def _rag_search(df: pd.DataFrame, prompt: str, top_n: int = 20) -> pd.DataFrame:
     Returns:
         pd.DataFrame: 检索结果，按相似度降序排列
     """
-    if len(prompt) < 2:
+    context_fields = []
+    if 'content' in df.columns:
+        context_fields.append('content')
+    for col in ['polarity_label', 'facility_type', 'csi_score', 'aspect']:
+        if col in df.columns:
+            context_fields.append(col)
+
+    retriever = RAGRetriever(context_fields=context_fields)
+    documents = df.where(df.notna(), None).to_dict(orient='records')
+    retriever.build_index(documents)
+
+    results = retriever.search(prompt, top_k=top_n, min_score=0.0)
+
+    if not results:
         return df.head(top_n)
 
-    search_content = df['content'].astype(str)
-    terms = _segment_prompt(prompt)
-    if not terms:
+    matched_indices = []
+    for r in results:
+        for idx, row in df.iterrows():
+            if row.get('content') == r.get('content') and idx not in matched_indices:
+                matched_indices.append(idx)
+                break
+
+    if not matched_indices:
         return df.head(top_n)
 
-    pattern = "|".join(set(terms))
-    mask = search_content.str.contains(pattern, na=False, case=False, regex=True)
-    matched = df[mask].copy()
-
-    if matched.empty:
-        return df.head(top_n)
-
-    if _TFIDF_AVAILABLE and len(matched) > 1:
-        try:
-            vectorizer = TfidfVectorizer(max_features=5000)
-            doc_texts = search_content[matched.index].tolist()
-            query_text = " ".join(terms)
-
-            all_texts = doc_texts + [query_text]
-            tfidf_matrix = vectorizer.fit_transform(all_texts)
-
-            query_vec = tfidf_matrix[-1]
-            doc_vecs = tfidf_matrix[:-1]
-
-            scores = (doc_vecs @ query_vec.T).toarray().flatten()
-            matched = matched.copy()
-            matched['_match_score'] = scores
-            matched = matched.sort_values('_match_score', ascending=False)
-            matched = matched.drop(columns=['_match_score'])
-            return matched.head(top_n)
-        except Exception:
-            pass
-
-    scores = []
-    for term in set(terms):
-        scores.append(search_content[matched.index].str.contains(term, na=False, case=False, regex=False).astype(int))
-    matched = matched.copy()
-    matched['_match_score'] = sum(scores)
-    matched = matched.sort_values('_match_score', ascending=False)
-    matched = matched.drop(columns=['_match_score'])
-    return matched.head(top_n)
+    return df.loc[matched_indices]
 
 
 def _build_context_text(ctx: pd.DataFrame) -> str:
@@ -125,6 +76,7 @@ def _build_context_text(ctx: pd.DataFrame) -> str:
     return "\n".join([f"- {line}" for line in lines])
 
 
+@safe_execute(default_return=None, user_message="智能问答加载出错，请稍后重试")
 def page_chatbot(load_analyzed_df):
     """智能决策助手页面：基于RAG的智能问答系统
 

@@ -14,6 +14,7 @@ from src.visualization.dashboard import generate_visualizations, plot_sankey_dia
 from src.analysis.academic_report import AcademicReportGenerator
 
 
+@safe_execute(default_return=None, user_message="数据中心加载出错，请稍后重试")
 def page_data_center(data_dir, raw_dir, read_csv_cached):
     """数据管理中心页面
 

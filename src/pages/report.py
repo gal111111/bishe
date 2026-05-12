@@ -7,7 +7,10 @@ import glob
 import time
 import streamlit as st
 
+from src.utils.error_handler import safe_execute
 
+
+@safe_execute(default_return=None, user_message="报告中心加载出错，请稍后重试")
 def page_report(data_dir, load_analyzed_df):
     """成果报告中心页面
 
